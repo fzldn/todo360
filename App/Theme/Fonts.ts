@@ -1,6 +1,4 @@
-import {StyleSheet} from 'react-native';
-
-const size = {
+export default {
   h1: 38,
   h2: 34,
   h3: 30,
@@ -9,21 +7,3 @@ const size = {
   medium: 14,
   small: 12,
 };
-
-export default StyleSheet.create({
-  h1: {
-    fontSize: size.h1,
-  },
-  h2: {
-    fontSize: size.h2,
-  },
-  h3: {
-    fontSize: size.h3,
-  },
-  normal: {
-    fontSize: size.regular,
-  },
-  small: {
-    fontSize: size.small,
-  },
-});

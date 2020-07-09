@@ -8,4 +8,6 @@ export default {
   tertiary: '#fae5d6',
   success: '#28a745',
   error: '#c14c5a',
+
+  bgColor: '#fbf5f5',
 };
