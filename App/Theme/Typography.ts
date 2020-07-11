@@ -1,27 +1,26 @@
 import Fonts from './Fonts';
 import Colors from './Colors';
-import {StyleProp, TextStyle} from 'react-native';
 
 const headingColor = Colors.text;
 
-const headingFontWeight = '700';
+const headingFontWeight = 700;
 
-const headingBase: StyleProp<TextStyle> = {
+const headingBase = {
   color: headingColor,
   fontWeight: headingFontWeight,
 };
 
-const h1: StyleProp<TextStyle> = {
+const h1 = {
   fontSize: Fonts.h1,
   ...headingBase,
 };
 
-const h2: StyleProp<TextStyle> = {
+const h2 = {
   fontSize: Fonts.h2,
   ...headingBase,
 };
 
-const h3: StyleProp<TextStyle> = {
+const h3 = {
   fontSize: Fonts.h3,
   ...headingBase,
 };
