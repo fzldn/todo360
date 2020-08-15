@@ -24,5 +24,10 @@ export const INITAL_STATE: TodoState = {
       title: 'This task comes with description',
       description: 'Hello World',
     }),
+    TodoFixture({
+      id: '5',
+      title: 'This task was completed',
+      completed_at: new Date(),
+    }),
   ],
 };

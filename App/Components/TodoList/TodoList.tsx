@@ -1,28 +1,34 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {SwipeListView} from 'react-native-swipe-list-view';
-import TodoItem from './TodoItem';
-import TodoHiddenItem from './TodoHiddenItem';
-import {TodoListProps, SwipeData} from '.';
+import {TodoListProps} from '.';
+import {View, Text, Dimensions} from 'react-native';
+import styles from './TodoListStyle';
 
-const TodoList: React.FC<TodoListProps> = (props) => {
-  const [swipeData, setSwipeData] = useState<SwipeData>({
-    key: '',
-    value: 0,
-    direction: 'left',
-    isOpen: false,
-  });
-
-  return (
-    <SwipeListView
-      data={props.data}
-      keyExtractor={(todo) => todo.id}
-      renderItem={TodoItem}
-      renderHiddenItem={(rowData) => (
-        <TodoHiddenItem {...rowData} swipeData={swipeData} />
-      )}
-      onSwipeValueChange={setSwipeData}
-    />
-  );
-};
+const TodoList: React.FC<TodoListProps> = ({data}) => (
+  <SwipeListView
+    data={data}
+    keyExtractor={(todo) => todo.id}
+    renderItem={(rowData) => (
+      <View style={styles.item}>
+        <Text style={styles.itemTitle}>{rowData.item.title}</Text>
+        {rowData.item.description && (
+          <Text style={styles.itemDescription}>{rowData.item.description}</Text>
+        )}
+      </View>
+    )}
+    renderHiddenItem={() => (
+      <View style={styles.hiddenItem}>
+        <View style={styles.hiddenItemAction}>
+          <Text style={styles.hiddenItemActionText}>DONE</Text>
+        </View>
+        <View style={styles.hiddenItemAction}>
+          <Text style={styles.hiddenItemActionText}>DELETE</Text>
+        </View>
+      </View>
+    )}
+    leftOpenValue={Dimensions.get('window').width}
+    rightOpenValue={-Dimensions.get('window').width}
+  />
+);
 
 export default TodoList;
