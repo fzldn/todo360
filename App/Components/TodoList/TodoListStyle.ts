@@ -22,9 +22,20 @@ export default StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 2,
-    backgroundColor: Colors.textMuted,
+    backgroundColor: Colors.transparent,
   },
-  hiddenItemAction: Metrics.horizontalPadding,
+  leftHiddenItemAction: {
+    ...Metrics.horizontalPadding,
+    ...Metrics.verticalPadding,
+    flex: 1,
+    alignItems: 'flex-start',
+  },
+  rightHiddenItemAction: {
+    ...Metrics.horizontalPadding,
+    ...Metrics.verticalPadding,
+    flex: 1,
+    alignItems: 'flex-end',
+  },
   hiddenItemActionText: {
     fontWeight: 'bold',
     color: Colors.white,

@@ -9,7 +9,7 @@ export const normal = tiny * 3; // 15
 export const medium = normal * 2; // 30
 
 export default {
-  topmMargin: {
+  topMargin: {
     marginTop: normal,
   },
   tinyTopMargin: {
