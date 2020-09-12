@@ -6,29 +6,54 @@ import styles from './TodoListStyle';
 import Colors from 'App/Theme/Colors';
 
 interface IRowSwipeValues {
-  [key: string]: number;
+  [key: string]: null | 'left' | 'right';
+}
+
+interface SwipeData {
+  key: string;
+  value: number;
+  direction: 'left' | 'right';
+  isOpen: boolean;
 }
 
 const TodoList: React.FC<TodoListProps> = ({data}) => {
   const [rowSwipeValues, setRowSwipeValues] = useState<IRowSwipeValues>({});
+
+  const onSwipeValueChange = ({key, value}: SwipeData) => {
+    const direction = value > 0 ? 'right' : value < 0 ? 'left' : null;
+    const rowSwipeValue = rowSwipeValues[key] ?? null;
+    if (direction !== rowSwipeValue) {
+      setRowSwipeValues({
+        ...rowSwipeValues,
+        [key]: direction,
+      });
+    }
+  };
+
   return (
     <SwipeListView
       data={data}
       keyExtractor={(todo) => todo.id}
-      renderItem={(rowData) => (
-        <View style={styles.item}>
-          <Text style={styles.itemTitle}>{rowData.item.title}</Text>
-          {rowData.item.description && (
-            <Text style={styles.itemDescription}>
-              {rowData.item.description}
+      renderItem={({item}) => {
+        const textStyleCompleted =
+          item.completed_at !== null ? styles.itemCompleted : {};
+        return (
+          <View style={styles.item}>
+            <Text style={[styles.itemTitle, textStyleCompleted]}>
+              {item.title}
             </Text>
-          )}
-        </View>
-      )}
+            {item.description && (
+              <Text style={[styles.itemDescription, textStyleCompleted]}>
+                {item.description}
+              </Text>
+            )}
+          </View>
+        );
+      }}
       renderHiddenItem={({item}) => {
-        let swipeValue = rowSwipeValues[item.id] ?? 0;
-        let rightSwiped = swipeValue > 0;
-        let leftSwiped = swipeValue < 0;
+        let direction = rowSwipeValues[item.id] ?? null;
+        let rightSwiped = direction === 'right';
+        let leftSwiped = direction === 'left';
         return (
           <View
             style={[
@@ -56,9 +81,7 @@ const TodoList: React.FC<TodoListProps> = ({data}) => {
       }}
       leftOpenValue={Dimensions.get('window').width}
       rightOpenValue={-Dimensions.get('window').width}
-      onSwipeValueChange={({key, value}) => {
-        setRowSwipeValues({...rowSwipeValues, [key]: value});
-      }}
+      onSwipeValueChange={onSwipeValueChange}
     />
   );
 };

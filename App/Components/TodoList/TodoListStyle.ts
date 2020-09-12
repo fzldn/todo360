@@ -16,6 +16,10 @@ export default StyleSheet.create({
     ...Metrics.tinyTopMargin,
     color: Colors.textMuted,
   },
+  itemCompleted: {
+    textDecorationLine: 'line-through',
+    textDecorationStyle: 'solid',
+  },
   hiddenItem: {
     flex: 1,
     flexDirection: 'row',

@@ -9,6 +9,7 @@ export default (props: Partial<Todo>): Todo => {
     completed_at: null,
     created_at: date,
     updated_at: date,
+    deleted_at: null,
   };
 
   return {...defaults, ...props};
