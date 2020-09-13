@@ -22,6 +22,7 @@ const TodoList: React.FC<TodoListProps> = ({data}) => {
   const onSwipeValueChange = ({key, value}: SwipeData) => {
     const direction = value > 0 ? 'right' : value < 0 ? 'left' : null;
     const rowSwipeValue = rowSwipeValues[key] ?? null;
+
     if (direction !== rowSwipeValue) {
       setRowSwipeValues({
         ...rowSwipeValues,
@@ -60,7 +61,9 @@ const TodoList: React.FC<TodoListProps> = ({data}) => {
               styles.hiddenItem,
               {
                 backgroundColor: rightSwiped
-                  ? Colors.primary
+                  ? item.completed_at === null
+                    ? Colors.primary
+                    : Colors.secondary
                   : leftSwiped
                   ? Colors.error
                   : Colors.transparent,
@@ -68,7 +71,9 @@ const TodoList: React.FC<TodoListProps> = ({data}) => {
             ]}>
             {rightSwiped && (
               <View style={styles.leftHiddenItemAction}>
-                <Text style={styles.hiddenItemActionText}>DONE</Text>
+                <Text style={styles.hiddenItemActionText}>
+                  {item.completed_at === null ? 'DONE' : 'UNDO'}
+                </Text>
               </View>
             )}
             {leftSwiped && (
@@ -82,6 +87,7 @@ const TodoList: React.FC<TodoListProps> = ({data}) => {
       leftOpenValue={Dimensions.get('window').width}
       rightOpenValue={-Dimensions.get('window').width}
       onSwipeValueChange={onSwipeValueChange}
+      onRowDidOpen={(id, rowMap) => rowMap[id].closeRow()}
     />
   );
 };

@@ -20,9 +20,9 @@ const sortTodo = (a: Todo, b: Todo) => {
     return -1;
   } else if (a.completed_at !== null && b.completed_at !== null) {
     if (a.completed_at < b.completed_at) {
-      return -1;
-    } else if (a.completed_at > b.completed_at) {
       return 1;
+    } else if (a.completed_at > b.completed_at) {
+      return -1;
     }
   }
 
