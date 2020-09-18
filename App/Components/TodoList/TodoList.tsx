@@ -1,9 +1,10 @@
 import React, {useState} from 'react';
-import {SwipeListView} from 'react-native-swipe-list-view';
+import {RowMap, SwipeListView} from 'react-native-swipe-list-view';
 import {TodoListProps} from '.';
-import {View, Text, Dimensions} from 'react-native';
+import {View, Text, Dimensions, ListRenderItemInfo} from 'react-native';
 import styles from './TodoListStyle';
 import Colors from 'App/Theme/Colors';
+import {Todo} from 'App/Types/Todo';
 
 interface IRowSwipeValues {
   [key: string]: null | 'left' | 'right';
@@ -16,41 +17,42 @@ interface SwipeData {
   isOpen: boolean;
 }
 
-const TodoList: React.FC<TodoListProps> = ({data}) => {
+const TodoList: React.FC<TodoListProps> = (props) => {
   const [rowSwipeValues, setRowSwipeValues] = useState<IRowSwipeValues>({});
+
+  const renderItem = (
+    rowData: ListRenderItemInfo<Todo>,
+    _rowMap: RowMap<Todo>,
+  ) => {
+    const {item} = rowData;
+    const textStyleCompleted =
+      item.completed_at !== null ? styles.itemCompleted : {};
+    return (
+      <View style={styles.item}>
+        <Text style={[styles.itemTitle, textStyleCompleted]}>{item.title}</Text>
+        {item.description && (
+          <Text style={[styles.itemDescription, textStyleCompleted]}>
+            {item.description}
+          </Text>
+        )}
+      </View>
+    );
+  };
 
   const onSwipeValueChange = ({key, value}: SwipeData) => {
     const direction = value > 0 ? 'right' : value < 0 ? 'left' : null;
     const rowSwipeValue = rowSwipeValues[key] ?? null;
 
     if (direction !== rowSwipeValue) {
-      setRowSwipeValues({
-        ...rowSwipeValues,
-        [key]: direction,
-      });
+      setRowSwipeValues({...rowSwipeValues, [key]: direction});
     }
   };
 
   return (
     <SwipeListView
-      data={data}
+      data={props.data}
       keyExtractor={(todo) => todo.id}
-      renderItem={({item}) => {
-        const textStyleCompleted =
-          item.completed_at !== null ? styles.itemCompleted : {};
-        return (
-          <View style={styles.item}>
-            <Text style={[styles.itemTitle, textStyleCompleted]}>
-              {item.title}
-            </Text>
-            {item.description && (
-              <Text style={[styles.itemDescription, textStyleCompleted]}>
-                {item.description}
-              </Text>
-            )}
-          </View>
-        );
-      }}
+      renderItem={renderItem}
       renderHiddenItem={({item}) => {
         let direction = rowSwipeValues[item.id] ?? null;
         let rightSwiped = direction === 'right';
@@ -84,10 +86,13 @@ const TodoList: React.FC<TodoListProps> = ({data}) => {
           </View>
         );
       }}
-      leftOpenValue={Dimensions.get('window').width}
-      rightOpenValue={-Dimensions.get('window').width}
       onSwipeValueChange={onSwipeValueChange}
-      onRowDidOpen={(id, rowMap) => rowMap[id].closeRow()}
+      leftActivationValue={Dimensions.get('window').width / 3}
+      rightActivationValue={-Dimensions.get('window').width / 3}
+      leftActionValue={Dimensions.get('window').width}
+      rightActionValue={-Dimensions.get('window').width}
+      onLeftAction={(rowKey, rowMap) => console.log(rowKey, rowMap)}
+      onRightAction={(rowKey, rowMap) => console.log(rowKey, rowMap)}
     />
   );
 };
