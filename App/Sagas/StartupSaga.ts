@@ -1,10 +1,10 @@
 import {delay, put} from 'redux-saga/effects';
-import {complete} from 'App/Stores/Startup/Actions';
+import {completeStartup} from 'App/Stores/Startup/Actions';
 
 /**
  * The startup saga is the place to define behavior to execute when the application starts.
  */
-export function* startup() {
+export function* startupSaga() {
   // Dispatch a redux action using `put()`
   // @see https://redux-saga.js.org/docs/basics/DispatchingActions.html
 
@@ -13,5 +13,5 @@ export function* startup() {
   // show SplashScreen longer after fetching user
   yield delay(2000);
 
-  yield put(complete());
+  yield put(completeStartup());
 }

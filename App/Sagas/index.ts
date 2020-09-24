@@ -1,6 +1,6 @@
 import {all, takeLatest} from 'redux-saga/effects';
-import {START_UP} from 'App/Stores/Startup/ActionTypes';
-import {startup} from './StartupSaga';
+import {START_UP} from 'App/Stores/Startup/Types';
+import {startupSaga} from './StartupSaga';
 
 export default function* root() {
   yield all([
@@ -8,6 +8,6 @@ export default function* root() {
      * @see https://redux-saga.js.org/docs/basics/UsingSagaHelpers.html
      */
     // Run the startup saga when the application starts
-    takeLatest(START_UP, startup),
+    takeLatest(START_UP, startupSaga),
   ]);
 }

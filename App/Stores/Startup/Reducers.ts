@@ -1,21 +1,27 @@
-import {StartupState, INITIAL_STATE} from './InitialState';
-import {StartupAction} from './Actions';
-import {START_UP, COMPLETE} from './ActionTypes';
+import {
+  START_UP,
+  COMPLETE_START_UP,
+  StartupState,
+  StartupActionTypes,
+} from './Types';
+
+const initialState: StartupState = {
+  isLoading: false,
+  isCompleted: false,
+};
 
 export default function (
-  state: StartupState = INITIAL_STATE,
-  action: StartupAction,
+  state: StartupState = initialState,
+  action: StartupActionTypes,
 ): StartupState {
   switch (action.type) {
     case START_UP:
       return {
-        ...state,
         isLoading: true,
         isCompleted: false,
       };
-    case COMPLETE:
+    case COMPLETE_START_UP:
       return {
-        ...state,
         isLoading: false,
         isCompleted: true,
       };

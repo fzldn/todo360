@@ -1,6 +1,6 @@
-import {Todo} from 'App/Types/Todo';
+import {Todo} from './Types';
 
-export default (props: Partial<Todo>): Todo => {
+const TodoFixture = (props: Partial<Todo>): Todo => {
   const date = new Date();
   const defaults: Todo = {
     id: '1',
@@ -14,3 +14,5 @@ export default (props: Partial<Todo>): Todo => {
 
   return {...defaults, ...props};
 };
+
+export default TodoFixture;

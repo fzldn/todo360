@@ -1,12 +1,6 @@
-import {START_UP, COMPLETE} from './ActionTypes';
+import {START_UP, COMPLETE_START_UP, StartupActionTypes} from './Types';
 
-export interface StartupAction {
-  type: string;
-}
-
-export interface DispatchStartup {
-  (action: StartupAction): void;
-}
-
-export const startup = (): StartupAction => ({type: START_UP});
-export const complete = (): StartupAction => ({type: COMPLETE});
+export const startup = (): StartupActionTypes => ({type: START_UP});
+export const completeStartup = (): StartupActionTypes => ({
+  type: COMPLETE_START_UP,
+});

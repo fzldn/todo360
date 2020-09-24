@@ -1,98 +1,91 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {RowMap, SwipeListView} from 'react-native-swipe-list-view';
-import {TodoListProps} from '.';
-import {View, Text, Dimensions, ListRenderItemInfo} from 'react-native';
-import styles from './TodoListStyle';
-import Colors from 'App/Theme/Colors';
-import {Todo} from 'App/Types/Todo';
+import {
+  Dimensions,
+  ListRenderItemInfo,
+  ViewProps,
+  Animated,
+} from 'react-native';
+import {Todo} from 'App/Stores/Todo/Types';
+import TodoListItem from './TodoListItem';
+import TodoListHiddenItem from './TodoListHiddenItem';
+import {useDispatch} from 'react-redux';
+import {
+  completeTodo,
+  deleteTodo,
+  restoreTodo,
+  undoTodo,
+} from 'App/Stores/Todo/Actions';
 
-interface IRowSwipeValues {
-  [key: string]: null | 'left' | 'right';
+interface TodoListProps {
+  data: Array<Todo>;
 }
 
-interface SwipeData {
-  key: string;
-  value: number;
-  direction: 'left' | 'right';
-  isOpen: boolean;
+export interface TodoListItemProps extends ViewProps {
+  rowData: ListRenderItemInfo<Todo>;
+  rowMap: RowMap<Todo>;
+  swipeAnimatedValue?: Animated.Value;
+  leftActionActivated?: boolean;
+  rightActionActivated?: boolean;
+  leftActionState?: boolean;
+  rightActionState?: boolean;
 }
 
 const TodoList: React.FC<TodoListProps> = (props) => {
-  const [rowSwipeValues, setRowSwipeValues] = useState<IRowSwipeValues>({});
+  const width = Dimensions.get('window').width;
+  const {data} = props;
+  const dispatch = useDispatch();
 
   const renderItem = (
     rowData: ListRenderItemInfo<Todo>,
-    _rowMap: RowMap<Todo>,
-  ) => {
-    const {item} = rowData;
-    const textStyleCompleted =
-      item.completed_at !== null ? styles.itemCompleted : {};
-    return (
-      <View style={styles.item}>
-        <Text style={[styles.itemTitle, textStyleCompleted]}>{item.title}</Text>
-        {item.description && (
-          <Text style={[styles.itemDescription, textStyleCompleted]}>
-            {item.description}
-          </Text>
-        )}
-      </View>
-    );
+    rowMap: RowMap<Todo>,
+  ) => <TodoListItem rowData={rowData} rowMap={rowMap} />;
+
+  const renderHiddenItem = (
+    rowData: ListRenderItemInfo<Todo>,
+    rowMap: RowMap<Todo>,
+  ) => <TodoListHiddenItem rowData={rowData} rowMap={rowMap} />;
+
+  const onLeftAction = (rowKey: string, rowMap: RowMap<Todo>) => {
+    const item = rowMap[rowKey].props.item;
+
+    if (item?.deleted_at) {
+      dispatch(restoreTodo(rowKey));
+    } else {
+      if (item?.completed_at) {
+        dispatch(undoTodo(rowKey));
+      } else {
+        dispatch(completeTodo(rowKey));
+      }
+    }
+
+    rowMap[rowKey].closeRowWithoutAnimation();
   };
 
-  const onSwipeValueChange = ({key, value}: SwipeData) => {
-    const direction = value > 0 ? 'right' : value < 0 ? 'left' : null;
-    const rowSwipeValue = rowSwipeValues[key] ?? null;
+  const onRightAction = (rowKey: string, rowMap: RowMap<Todo>) => {
+    const item = rowMap[rowKey].props.item;
 
-    if (direction !== rowSwipeValue) {
-      setRowSwipeValues({...rowSwipeValues, [key]: direction});
+    if (item?.deleted_at) {
+      // dispatch(restoreTodo(rowKey));
+    } else {
+      dispatch(deleteTodo(rowKey));
     }
+
+    rowMap[rowKey].closeRowWithoutAnimation();
   };
 
   return (
     <SwipeListView
-      data={props.data}
+      data={data}
       keyExtractor={(todo) => todo.id}
       renderItem={renderItem}
-      renderHiddenItem={({item}) => {
-        let direction = rowSwipeValues[item.id] ?? null;
-        let rightSwiped = direction === 'right';
-        let leftSwiped = direction === 'left';
-        return (
-          <View
-            style={[
-              styles.hiddenItem,
-              {
-                backgroundColor: rightSwiped
-                  ? item.completed_at === null
-                    ? Colors.primary
-                    : Colors.secondary
-                  : leftSwiped
-                  ? Colors.error
-                  : Colors.transparent,
-              },
-            ]}>
-            {rightSwiped && (
-              <View style={styles.leftHiddenItemAction}>
-                <Text style={styles.hiddenItemActionText}>
-                  {item.completed_at === null ? 'DONE' : 'UNDO'}
-                </Text>
-              </View>
-            )}
-            {leftSwiped && (
-              <View style={styles.rightHiddenItemAction}>
-                <Text style={styles.hiddenItemActionText}>DELETE</Text>
-              </View>
-            )}
-          </View>
-        );
-      }}
-      onSwipeValueChange={onSwipeValueChange}
-      leftActivationValue={Dimensions.get('window').width / 3}
-      rightActivationValue={-Dimensions.get('window').width / 3}
-      leftActionValue={Dimensions.get('window').width}
-      rightActionValue={-Dimensions.get('window').width}
-      onLeftAction={(rowKey, rowMap) => console.log(rowKey, rowMap)}
-      onRightAction={(rowKey, rowMap) => console.log(rowKey, rowMap)}
+      renderHiddenItem={renderHiddenItem}
+      leftActivationValue={width / 3}
+      rightActivationValue={-width / 3}
+      leftActionValue={width}
+      rightActionValue={-width}
+      onLeftAction={onLeftAction}
+      onRightAction={onRightAction}
     />
   );
 };

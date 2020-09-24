@@ -1,16 +1,28 @@
-import {Todo} from 'App/Types/Todo';
-import {COMPLETE} from './ActionTypes';
+import {
+  COMPLETE_TODO,
+  DELETE_TODO,
+  RESTORE_TODO,
+  Todo,
+  TodosActionTypes,
+  UNDO_TODO,
+} from './Types';
 
-export interface TodoAction {
-  type: string;
-  payload: Todo | string;
-}
+export const completeTodo = (todo: Todo | string): TodosActionTypes => ({
+  type: COMPLETE_TODO,
+  payload: todo,
+});
 
-export interface DispatchTodo {
-  (action: TodoAction): void;
-}
+export const undoTodo = (todo: Todo | string): TodosActionTypes => ({
+  type: UNDO_TODO,
+  payload: todo,
+});
 
-export const complete = (id: Todo | string): TodoAction => ({
-  type: COMPLETE,
-  payload: id,
+export const restoreTodo = (todo: Todo | string): TodosActionTypes => ({
+  type: RESTORE_TODO,
+  payload: todo,
+});
+
+export const deleteTodo = (todo: Todo | string): TodosActionTypes => ({
+  type: DELETE_TODO,
+  payload: todo,
 });
