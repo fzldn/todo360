@@ -1,5 +1,5 @@
-import {AppState} from '..';
+import {AppState} from 'App/Stores';
 
-export const isCompleted = (state: AppState) => {
+export const selectStartupIsCompleted = (state: AppState) => {
   return state.startup.isCompleted;
 };

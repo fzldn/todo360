@@ -13,6 +13,7 @@ import {useDispatch} from 'react-redux';
 import {
   completeTodo,
   deleteTodo,
+  removeTodo,
   restoreTodo,
   undoTodo,
 } from 'App/Stores/Todo/Actions';
@@ -66,12 +67,11 @@ const TodoList: React.FC<TodoListProps> = (props) => {
     const item = rowMap[rowKey].props.item;
 
     if (item?.deleted_at) {
-      // dispatch(restoreTodo(rowKey));
+      dispatch(removeTodo(rowKey));
     } else {
       dispatch(deleteTodo(rowKey));
+      rowMap[rowKey].closeRowWithoutAnimation();
     }
-
-    rowMap[rowKey].closeRowWithoutAnimation();
   };
 
   return (

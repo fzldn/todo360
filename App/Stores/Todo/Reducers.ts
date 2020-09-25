@@ -2,8 +2,9 @@ import TodoFixture from './Fixtures';
 import {
   COMPLETE_TODO,
   DELETE_TODO,
+  REMOVE_TODO,
   RESTORE_TODO,
-  TodosActionTypes,
+  TodoActionTypes,
   TodoState,
   UNDO_TODO,
 } from './Types';
@@ -40,18 +41,18 @@ const initialState: TodoState = {
   ],
 };
 
-export function todoReducer(
+export function TodoReducer(
   state = initialState,
-  action: TodosActionTypes,
+  action: TodoActionTypes,
 ): TodoState {
   const {type, payload} = action;
+  var date = new Date();
   switch (type) {
     case COMPLETE_TODO:
       return {
         todos: state.todos.filter((todo) => {
           const id = typeof payload === 'string' ? payload : payload.id;
           if (todo.id === id) {
-            var date = new Date();
             todo.completed_at = date;
             todo.updated_at = date;
           }
@@ -64,7 +65,19 @@ export function todoReducer(
           const id = typeof payload === 'string' ? payload : payload.id;
           if (todo.id === id) {
             todo.completed_at = null;
-            todo.updated_at = new Date();
+            todo.updated_at = date;
+          }
+          return todo;
+        }),
+      };
+    case DELETE_TODO:
+      return {
+        todos: state.todos.filter((todo) => {
+          const id = typeof payload === 'string' ? payload : payload.id;
+          if (todo.id === id) {
+            todo.completed_at = null;
+            todo.deleted_at = date;
+            todo.updated_at = date;
           }
           return todo;
         }),
@@ -75,21 +88,16 @@ export function todoReducer(
           const id = typeof payload === 'string' ? payload : payload.id;
           if (todo.id === id) {
             todo.deleted_at = null;
-            todo.updated_at = new Date();
+            todo.updated_at = date;
           }
           return todo;
         }),
       };
-    case DELETE_TODO:
+    case REMOVE_TODO:
       return {
         todos: state.todos.filter((todo) => {
           const id = typeof payload === 'string' ? payload : payload.id;
-          if (todo.id === id) {
-            var date = new Date();
-            todo.deleted_at = date;
-            todo.updated_at = date;
-          }
-          return todo;
+          return todo.id !== id;
         }),
       };
     default:

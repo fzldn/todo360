@@ -12,15 +12,20 @@ export interface TodoState {
   todos: Array<Todo>;
 }
 
-export const COMPLETE_TODO: string = '@ToDo360/Todo/COMPLETE';
-export const UNDO_TODO: string = '@ToDo360/Todo/UNDO';
-export const RESTORE_TODO: string = '@ToDo360/Todo/RESTORE';
-export const DELETE_TODO: string = '@ToDo360/Todo/DELETE';
-export const REMOVE_TODO: string = '@ToDo360/Todo/REMOVE';
+export const COMPLETE_TODO: '@ToDo360/Todo/COMPLETE' = '@ToDo360/Todo/COMPLETE';
+export const UNDO_TODO: '@ToDo360/Todo/UNDO' = '@ToDo360/Todo/UNDO';
+export const DELETE_TODO: '@ToDo360/Todo/DELETE' = '@ToDo360/Todo/DELETE';
+export const RESTORE_TODO: '@ToDo360/Todo/RESTORE' = '@ToDo360/Todo/RESTORE';
+export const REMOVE_TODO: '@ToDo360/Todo/REMOVE' = '@ToDo360/Todo/REMOVE';
 
 interface ITodoAction {
-  type: string;
+  type:
+    | typeof COMPLETE_TODO
+    | typeof UNDO_TODO
+    | typeof DELETE_TODO
+    | typeof RESTORE_TODO
+    | typeof REMOVE_TODO;
   payload: Todo | string;
 }
 
-export type TodosActionTypes = ITodoAction;
+export type TodoActionTypes = ITodoAction;

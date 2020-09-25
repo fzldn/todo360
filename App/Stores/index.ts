@@ -2,11 +2,11 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {combineReducers} from 'redux';
 import {persistReducer} from 'redux-persist';
 import StartupReducer from 'App/Stores/Startup/Reducers';
-import {todoReducer} from 'App/Stores/Todo/Reducers';
+import {TodoReducer} from 'App/Stores/Todo/Reducers';
 import configureStore from './CreateStore';
 import rootSaga from 'App/Sagas';
-import {StartupState} from './Startup/InitialState';
 import {TodoState} from './Todo/Types';
+import {StartupState} from './Startup/Types';
 
 export interface AppState {
   startup: StartupState;
@@ -32,7 +32,7 @@ export default () => {
      * @see https://redux.js.org/api-reference/combinereducers
      */
     startup: StartupReducer,
-    todo: persistReducer(todoPersistConfig, todoReducer),
+    todo: persistReducer(todoPersistConfig, TodoReducer),
   });
 
   // Redux persist

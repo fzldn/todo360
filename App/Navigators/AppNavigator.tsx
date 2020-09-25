@@ -2,13 +2,13 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 import HomeScreen from 'App/Containers/HomeScreen/HomeScreen';
 import {useSelector} from 'react-redux';
-import {isCompleted} from 'App/Stores/Startup/Selectors';
+import {selectStartupIsCompleted} from 'App/Stores/Startup/Selectors';
 import SplashScreen from 'App/Containers/SplashScreen/SplashScreen';
 
 const Stack = createStackNavigator();
 
 const AppNavigator = () => {
-  const startupCompleted = useSelector(isCompleted);
+  const startupCompleted = useSelector(selectStartupIsCompleted);
 
   if (!startupCompleted) {
     return <SplashScreen />;

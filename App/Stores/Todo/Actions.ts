@@ -1,28 +1,34 @@
 import {
   COMPLETE_TODO,
   DELETE_TODO,
+  REMOVE_TODO,
   RESTORE_TODO,
   Todo,
-  TodosActionTypes,
+  TodoActionTypes,
   UNDO_TODO,
 } from './Types';
 
-export const completeTodo = (todo: Todo | string): TodosActionTypes => ({
+export const completeTodo = (todo: Todo | string): TodoActionTypes => ({
   type: COMPLETE_TODO,
   payload: todo,
 });
 
-export const undoTodo = (todo: Todo | string): TodosActionTypes => ({
+export const undoTodo = (todo: Todo | string): TodoActionTypes => ({
   type: UNDO_TODO,
   payload: todo,
 });
 
-export const restoreTodo = (todo: Todo | string): TodosActionTypes => ({
+export const deleteTodo = (todo: Todo | string): TodoActionTypes => ({
+  type: DELETE_TODO,
+  payload: todo,
+});
+
+export const restoreTodo = (todo: Todo | string): TodoActionTypes => ({
   type: RESTORE_TODO,
   payload: todo,
 });
 
-export const deleteTodo = (todo: Todo | string): TodosActionTypes => ({
-  type: DELETE_TODO,
+export const removeTodo = (todo: Todo | string): TodoActionTypes => ({
+  type: REMOVE_TODO,
   payload: todo,
 });
