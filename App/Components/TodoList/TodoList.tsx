@@ -47,7 +47,7 @@ const TodoList: React.FC<TodoListProps> = (props) => {
     rowMap: RowMap<Todo>,
   ) => <TodoListHiddenItem rowData={rowData} rowMap={rowMap} />;
 
-  const onLeftAction = (rowKey: string, rowMap: RowMap<Todo>) => {
+  const onLeftOpen = (rowKey: string, rowMap: RowMap<Todo>) => {
     const item = rowMap[rowKey].props.item;
 
     if (item?.deleted_at) {
@@ -63,7 +63,7 @@ const TodoList: React.FC<TodoListProps> = (props) => {
     rowMap[rowKey].closeRowWithoutAnimation();
   };
 
-  const onRightAction = (rowKey: string, rowMap: RowMap<Todo>) => {
+  const onRightOpen = (rowKey: string, rowMap: RowMap<Todo>) => {
     const item = rowMap[rowKey].props.item;
 
     if (item?.deleted_at) {
@@ -80,12 +80,16 @@ const TodoList: React.FC<TodoListProps> = (props) => {
       keyExtractor={(todo) => todo.id}
       renderItem={renderItem}
       renderHiddenItem={renderHiddenItem}
-      leftActivationValue={width / 3}
-      rightActivationValue={-width / 3}
-      leftActionValue={width}
-      rightActionValue={-width}
-      onLeftAction={onLeftAction}
-      onRightAction={onRightAction}
+      leftOpenValue={width}
+      rightOpenValue={-width}
+      swipeToOpenPercent={30}
+      onRowDidOpen={(rowKey, rowMap, swipeValue) => {
+        if (swipeValue > 0) {
+          onLeftOpen(rowKey, rowMap);
+        } else if (swipeValue < 0) {
+          onRightOpen(rowKey, rowMap);
+        }
+      }}
     />
   );
 };
