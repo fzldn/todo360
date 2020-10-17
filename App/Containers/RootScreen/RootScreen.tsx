@@ -1,22 +1,16 @@
 import React, {useEffect} from 'react';
 import {useDispatch} from 'react-redux';
-import {startup} from 'App/Stores/Startup/Actions';
-import {NavigationContainer} from '@react-navigation/native';
+import {startupAction} from 'App/Stores/Startup/Actions';
 import AppNavigator from 'App/Navigators/AppNavigator';
-import {navigationRef} from 'App/Services/NavigationService';
 
 const RootScreen = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(startup());
+    dispatch(startupAction());
   });
 
-  return (
-    <NavigationContainer ref={navigationRef}>
-      <AppNavigator />
-    </NavigationContainer>
-  );
+  return <AppNavigator />;
 };
 
 export default RootScreen;

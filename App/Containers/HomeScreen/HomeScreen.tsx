@@ -6,8 +6,16 @@ import {useSelector} from 'react-redux';
 import {selectTodos} from 'App/Stores/Todo/Selectors';
 import TodoList from 'App/Components/TodoList/TodoList';
 import {StatusBar} from 'react-native';
+import {FloatingAction} from 'react-native-floating-action';
+import Colors from 'App/Theme/Colors';
+import {StackNavigationProp} from '@react-navigation/stack';
+import {RootStackParamList} from 'App/Navigators/AppNavigator';
 
-const HomeScreen = () => {
+type Props = {
+  navigation: StackNavigationProp<RootStackParamList, 'HomeScreen'>;
+};
+
+const HomeScreen: React.FC<Props> = ({navigation}) => {
   const todos = useSelector(selectTodos);
 
   return (
@@ -17,6 +25,13 @@ const HomeScreen = () => {
         Todo
       </Heading>
       <TodoList data={todos} />
+      <FloatingAction
+        color={Colors.primary}
+        position="center"
+        onPressMain={() => navigation.navigate('TodoFormScreen')}
+        showBackground={false}
+        animated={false}
+      />
     </SafeContainer>
   );
 };

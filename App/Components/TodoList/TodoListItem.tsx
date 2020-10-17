@@ -1,3 +1,4 @@
+import {navigate} from 'App/Services/NavigationService';
 import React from 'react';
 import {Text, View} from 'react-native';
 import styled from 'styled-components/native';
@@ -10,7 +11,6 @@ const TodoListItem: React.FC<TodoListItemProps> = (props) => {
   const {
     rowData: {item},
   } = props;
-
   const itemOpacity = item.deleted_at ? 0.4 : 1;
 
   const ListItemTitle = styled(Text)({

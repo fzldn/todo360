@@ -1,5 +1,5 @@
 import {delay, put} from 'redux-saga/effects';
-import {completeStartup} from 'App/Stores/Startup/Actions';
+import {completeStartupAction} from 'App/Stores/Startup/Actions';
 
 /**
  * The startup saga is the place to define behavior to execute when the application starts.
@@ -13,5 +13,5 @@ export function* startupSaga() {
   // show SplashScreen longer after fetching user
   yield delay(2000);
 
-  yield put(completeStartup());
+  yield put(completeStartupAction());
 }

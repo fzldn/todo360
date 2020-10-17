@@ -4,8 +4,17 @@ import HomeScreen from 'App/Containers/HomeScreen/HomeScreen';
 import {useSelector} from 'react-redux';
 import {selectStartupIsCompleted} from 'App/Stores/Startup/Selectors';
 import SplashScreen from 'App/Containers/SplashScreen/SplashScreen';
+import TodoFormScreen from 'App/Containers/TodoFormScreen';
+import {Todo} from 'App/Stores/Todo/Types';
+import {NavigationContainer} from '@react-navigation/native';
+import {navigationRef} from 'App/Services/NavigationService';
 
-const Stack = createStackNavigator();
+export type RootStackParamList = {
+  HomeScreen: undefined;
+  TodoFormScreen: Todo | undefined;
+};
+
+const Stack = createStackNavigator<RootStackParamList>();
 
 const AppNavigator = () => {
   const startupCompleted = useSelector(selectStartupIsCompleted);
@@ -15,13 +24,12 @@ const AppNavigator = () => {
   }
 
   return (
-    <Stack.Navigator initialRouteName="MainScreen">
-      <Stack.Screen
-        name="MainScreen"
-        component={HomeScreen}
-        options={{headerShown: false}}
-      />
-    </Stack.Navigator>
+    <NavigationContainer ref={navigationRef}>
+      <Stack.Navigator initialRouteName="HomeScreen" headerMode="none">
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
+        <Stack.Screen name="TodoFormScreen" component={TodoFormScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 };
 
