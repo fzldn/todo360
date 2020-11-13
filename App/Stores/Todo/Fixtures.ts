@@ -1,10 +1,11 @@
-import {Todo} from './Types';
+import {Todo, TodoAdd} from './Types';
+import {v4 as uuidv4} from 'uuid';
 
-const TodoFixture = (props: Partial<Todo>): Todo => {
+const TodoFixture = (todo: TodoAdd): Todo => {
   const date = new Date();
   const defaults: Todo = {
-    id: '1',
-    title: 'Todo',
+    id: uuidv4(),
+    title: '',
     description: null,
     completed_at: null,
     created_at: date,
@@ -12,7 +13,7 @@ const TodoFixture = (props: Partial<Todo>): Todo => {
     deleted_at: null,
   };
 
-  return {...defaults, ...props};
+  return {...defaults, ...todo};
 };
 
 export default TodoFixture;

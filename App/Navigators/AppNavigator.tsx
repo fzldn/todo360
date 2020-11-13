@@ -10,8 +10,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {navigationRef} from 'App/Services/NavigationService';
 
 export type RootStackParamList = {
-  HomeScreen: undefined;
-  TodoFormScreen: Todo | undefined;
+  readonly HomeScreen: undefined;
+  readonly TodoFormScreen: Todo | undefined;
 };
 
 const Stack = createStackNavigator<RootStackParamList>();

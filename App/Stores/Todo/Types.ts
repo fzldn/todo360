@@ -1,15 +1,19 @@
 export interface Todo {
-  id: string;
-  title: string;
-  description: string | null;
-  completed_at: Date | null;
-  deleted_at: Date | null;
-  created_at: Date;
-  updated_at: Date;
+  readonly id: string;
+  readonly title: string;
+  readonly description: string | null;
+  readonly completed_at: Date | null;
+  readonly deleted_at: Date | null;
+  readonly created_at: Date;
+  readonly updated_at: Date;
 }
 
+export type TodoAdd = Partial<Omit<Todo, 'id'>> & Pick<Todo, 'title'>;
+
+export type TodoUpdate = Partial<Todo> & Pick<Todo, 'id'>;
+
 export interface TodoState {
-  todos: Array<Todo>;
+  readonly todos: ReadonlyArray<Todo>;
 }
 
 export const COMPLETE_TODO: '@ToDo360/Todo/COMPLETE' = '@ToDo360/Todo/COMPLETE';
@@ -18,14 +22,27 @@ export const DELETE_TODO: '@ToDo360/Todo/DELETE' = '@ToDo360/Todo/DELETE';
 export const RESTORE_TODO: '@ToDo360/Todo/RESTORE' = '@ToDo360/Todo/RESTORE';
 export const REMOVE_TODO: '@ToDo360/Todo/REMOVE' = '@ToDo360/Todo/REMOVE';
 
+export const ADD_TODO: '@ToDo360/Todo/ADD' = '@ToDo360/Todo/ADD';
+export const UPDATE_TODO: '@ToDo360/Todo/UPDATE' = '@ToDo360/Todo/UPDATE';
+
 interface ITodoAction {
-  type:
+  readonly type:
     | typeof COMPLETE_TODO
     | typeof UNDO_TODO
     | typeof DELETE_TODO
     | typeof RESTORE_TODO
     | typeof REMOVE_TODO;
-  payload: Todo | string;
+  readonly payload: Todo | string;
 }
 
-export type TodoActionTypes = ITodoAction;
+interface ITodoAddAction {
+  readonly type: typeof ADD_TODO;
+  readonly payload: TodoAdd;
+}
+
+interface ITodoUpdateAction {
+  readonly type: typeof UPDATE_TODO;
+  readonly payload: TodoUpdate;
+}
+
+export type TodoActionTypes = ITodoAction | ITodoAddAction | ITodoUpdateAction;

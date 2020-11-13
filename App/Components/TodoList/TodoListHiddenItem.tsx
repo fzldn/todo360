@@ -18,6 +18,7 @@ const TodoListHiddenItem: React.FC<TodoListItemProps> = (props) => {
 
   if (swipeAnimatedValue) {
     swipeAnimatedValue.addListener(({value}) => {
+      // eslint-disable-next-line functional/no-let
       let direction: TSwipeDirection = null;
 
       if (value > 0) {

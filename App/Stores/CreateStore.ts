@@ -9,13 +9,16 @@ export default (persistedReducer: Reducer, rootSaga: Saga) => {
 
   // Connect the sagas to the redux store
   const sagaMiddleware = createSagaMiddleware();
+  // eslint-disable-next-line functional/immutable-data
   middlewares.push(sagaMiddleware);
 
   if (process.env.NODE_ENV === 'development') {
     const logger = createLogger({duration: true});
+    // eslint-disable-next-line functional/immutable-data
     middlewares.push(logger);
   }
 
+  // eslint-disable-next-line functional/immutable-data
   enhancers.push(applyMiddleware(...middlewares));
 
   const store = createStore(persistedReducer, compose(...enhancers));

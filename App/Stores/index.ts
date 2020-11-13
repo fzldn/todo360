@@ -9,8 +9,8 @@ import {TodoState} from './Todo/Types';
 import {StartupState} from './Startup/Types';
 
 export interface AppState {
-  startup: StartupState;
-  todo: TodoState;
+  readonly startup: StartupState;
+  readonly todo: TodoState;
 }
 
 const persistConfig = {

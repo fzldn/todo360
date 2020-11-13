@@ -4,7 +4,7 @@ import styled from 'styled-components/native';
 import Typography from 'App/Theme/Typography';
 
 interface HeadingProps extends TextProps {
-  type: 'h1' | 'h2' | 'h3';
+  readonly type: 'h1' | 'h2' | 'h3';
 }
 
 const TextStyled = styled(Text)(

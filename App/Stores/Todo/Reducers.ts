@@ -1,5 +1,6 @@
 import TodoFixture from './Fixtures';
 import {
+  ADD_TODO,
   COMPLETE_TODO,
   DELETE_TODO,
   REMOVE_TODO,
@@ -7,34 +8,29 @@ import {
   TodoActionTypes,
   TodoState,
   UNDO_TODO,
+  UPDATE_TODO,
 } from './Types';
 
 const initialState: TodoState = {
   todos: [
     TodoFixture({
-      id: '1',
       title: 'Welcome to ToDo360',
     }),
     TodoFixture({
-      id: '2',
       title: 'Swipe right to marked this task as completed',
     }),
     TodoFixture({
-      id: '3',
       title: 'Swipe left to delete this task',
     }),
     TodoFixture({
-      id: '4',
       title: 'This task comes with description',
       description: 'Hello World',
     }),
     TodoFixture({
-      id: '5',
       title: 'This task was completed',
       completed_at: new Date(),
     }),
     TodoFixture({
-      id: '6',
       title: 'This task was deleted',
       deleted_at: new Date(),
     }),
@@ -45,50 +41,62 @@ export function TodoReducer(
   state = initialState,
   action: TodoActionTypes,
 ): TodoState {
-  const {type, payload} = action;
   var date = new Date();
-  switch (type) {
+
+  switch (action.type) {
     case COMPLETE_TODO:
       return {
-        todos: state.todos.filter((todo) => {
-          const id = typeof payload === 'string' ? payload : payload.id;
+        todos: state.todos.map((todo) => {
+          const id =
+            typeof action.payload === 'string'
+              ? action.payload
+              : action.payload.id;
           if (todo.id === id) {
-            todo.completed_at = date;
-            todo.updated_at = date;
+            return {...todo, completed_at: date, updated_at: date};
           }
           return todo;
         }),
       };
     case UNDO_TODO:
       return {
-        todos: state.todos.filter((todo) => {
-          const id = typeof payload === 'string' ? payload : payload.id;
+        todos: state.todos.map((todo) => {
+          const id =
+            typeof action.payload === 'string'
+              ? action.payload
+              : action.payload.id;
           if (todo.id === id) {
-            todo.completed_at = null;
-            todo.updated_at = date;
+            return {...todo, completed_at: null, updated_at: date};
           }
           return todo;
         }),
       };
     case DELETE_TODO:
       return {
-        todos: state.todos.filter((todo) => {
-          const id = typeof payload === 'string' ? payload : payload.id;
+        todos: state.todos.map((todo) => {
+          const id =
+            typeof action.payload === 'string'
+              ? action.payload
+              : action.payload.id;
           if (todo.id === id) {
-            todo.completed_at = null;
-            todo.deleted_at = date;
-            todo.updated_at = date;
+            return {
+              ...todo,
+              completed_at: null,
+              updated_at: date,
+              deleted_at: date,
+            };
           }
           return todo;
         }),
       };
     case RESTORE_TODO:
       return {
-        todos: state.todos.filter((todo) => {
-          const id = typeof payload === 'string' ? payload : payload.id;
+        todos: state.todos.map((todo) => {
+          const id =
+            typeof action.payload === 'string'
+              ? action.payload
+              : action.payload.id;
           if (todo.id === id) {
-            todo.deleted_at = null;
-            todo.updated_at = date;
+            return {...todo, deleted_at: null, updated_at: date};
           }
           return todo;
         }),
@@ -96,8 +104,24 @@ export function TodoReducer(
     case REMOVE_TODO:
       return {
         todos: state.todos.filter((todo) => {
-          const id = typeof payload === 'string' ? payload : payload.id;
+          const id =
+            typeof action.payload === 'string'
+              ? action.payload
+              : action.payload.id;
           return todo.id !== id;
+        }),
+      };
+    case ADD_TODO:
+      return {
+        todos: [...state.todos, TodoFixture(action.payload)],
+      };
+    case UPDATE_TODO:
+      return {
+        todos: state.todos.map((todo) => {
+          if (todo.id === action.payload.id) {
+            return {...todo, ...action.payload, updated_at: date};
+          }
+          return todo;
         }),
       };
     default:

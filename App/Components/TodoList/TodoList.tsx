@@ -19,17 +19,17 @@ import {
 } from 'App/Stores/Todo/Actions';
 
 interface TodoListProps {
-  data: Array<Todo>;
+  readonly data: ReadonlyArray<Todo>;
 }
 
 export interface TodoListItemProps extends ViewProps {
-  rowData: ListRenderItemInfo<Todo>;
-  rowMap: RowMap<Todo>;
-  swipeAnimatedValue?: Animated.Value;
-  leftActionActivated?: boolean;
-  rightActionActivated?: boolean;
-  leftActionState?: boolean;
-  rightActionState?: boolean;
+  readonly rowData: ListRenderItemInfo<Todo>;
+  readonly rowMap: RowMap<Todo>;
+  readonly swipeAnimatedValue?: Animated.Value;
+  readonly leftActionActivated?: boolean;
+  readonly rightActionActivated?: boolean;
+  readonly leftActionState?: boolean;
+  readonly rightActionState?: boolean;
 }
 
 const TodoList: React.FC<TodoListProps> = (props) => {
@@ -50,13 +50,15 @@ const TodoList: React.FC<TodoListProps> = (props) => {
   const onLeftOpen = (rowKey: string, rowMap: RowMap<Todo>) => {
     const item = rowMap[rowKey].props.item;
 
-    if (item?.deleted_at) {
-      dispatch(restoreTodo(rowKey));
-    } else {
-      if (item?.completed_at) {
-        dispatch(undoTodo(rowKey));
+    if (item) {
+      if (item.deleted_at) {
+        dispatch(restoreTodo(item));
       } else {
-        dispatch(completeTodo(rowKey));
+        if (item.completed_at) {
+          dispatch(undoTodo(item));
+        } else {
+          dispatch(completeTodo(item));
+        }
       }
     }
 
@@ -66,11 +68,13 @@ const TodoList: React.FC<TodoListProps> = (props) => {
   const onRightOpen = (rowKey: string, rowMap: RowMap<Todo>) => {
     const item = rowMap[rowKey].props.item;
 
-    if (item?.deleted_at) {
-      dispatch(removeTodo(rowKey));
-    } else {
-      dispatch(deleteTodo(rowKey));
-      rowMap[rowKey].closeRowWithoutAnimation();
+    if (item) {
+      if (item.deleted_at) {
+        dispatch(removeTodo(item));
+      } else {
+        dispatch(deleteTodo(item));
+        rowMap[rowKey].closeRowWithoutAnimation();
+      }
     }
   };
 

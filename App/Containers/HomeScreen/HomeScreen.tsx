@@ -12,7 +12,7 @@ import {StackNavigationProp} from '@react-navigation/stack';
 import {RootStackParamList} from 'App/Navigators/AppNavigator';
 
 type Props = {
-  navigation: StackNavigationProp<RootStackParamList, 'HomeScreen'>;
+  readonly navigation: StackNavigationProp<RootStackParamList, 'HomeScreen'>;
 };
 
 const HomeScreen: React.FC<Props> = ({navigation}) => {
